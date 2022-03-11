@@ -16,8 +16,6 @@ class MovScreen extends StatefulWidget {
 }
 
 class _MovScreenState extends State<MovScreen> {
-
-
   bool _isLoading = true;
 
   //list for api
@@ -26,16 +24,14 @@ class _MovScreenState extends State<MovScreen> {
   List ViewManga = [];
   List RatingManga = [];
 
-   //get manga details from api
+  //get manga details from api
   void _apiMangaDetails() async {
     try {
       //Hot Manga API
       manga.clear();
       var res = await CallApi().getBrowserhot('');
       var bodyRoutes = json.decode(res.body);
-      manga.add(bodyRoutes);
-
-
+      manga = bodyRoutes;
 
       //new Manga API
       Newmanga.clear();
@@ -43,14 +39,11 @@ class _MovScreenState extends State<MovScreen> {
       var bodyRoutesNew = json.decode(resNew.body);
       Newmanga.add(bodyRoutesNew);
 
-   
-
       //View Manga API
       ViewManga.clear();
       var resView = await CallApi().getViewMangas('');
       var bodyRoutesView = json.decode(resView.body);
       ViewManga.add(bodyRoutesView);
-
 
       //Rating Manga API
       RatingManga.clear();
@@ -58,14 +51,13 @@ class _MovScreenState extends State<MovScreen> {
       var bodyRoutesRating = json.decode(resRating.body);
       RatingManga.add(bodyRoutesRating);
 
-
-      print("Hot Manga API ---" + manga.toString() );
+      print("Hot Manga API ---" + manga.toString());
       print("--------------------------------");
-      print("New Manga API ---" + Newmanga.toString());
-      print("--------------------------------");
-      print("View Manga API ---" + ViewManga.toString());
-      print("--------------------------------");
-      print("Rating Manga API ---" + RatingManga.toString());
+      // print("New Manga API ---" + Newmanga.toString());
+      // print("--------------------------------");
+      // print("View Manga API ---" + ViewManga.toString());
+      // print("--------------------------------");
+      // print("Rating Manga API ---" + RatingManga.toString());
 
       setState(() {
         _isLoading = false;
