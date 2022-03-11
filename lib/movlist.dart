@@ -16,32 +16,91 @@ class MovScreen extends StatefulWidget {
 }
 
 class _MovScreenState extends State<MovScreen> {
-  Future getMoviedata() async {
-    var response = await http.get(
-      Uri.https('api.comick.fun', 'chapter?order=hot'),
 
-      //      headers: {
-      //   'Content-Type': 'application/json',
-      //   'Accept': "application/json",
-      // }
-    );
 
-    // Map<int, dynamic> map = json.decode(response.body);
-    // List<dynamic> data = map["md_comics"];
-    // print(data[0]["id"]);
+  bool _isLoading = true;
 
-    var jsonData = jsonDecode(response.body);
+  //list for api
+  List manga = [];
+  List Newmanga = [];
+  List ViewManga = [];
+  List RatingManga = [];
 
-    List<Movies> movies = [];
+   //get manga details from api
+  void _apiMangaDetails() async {
+    try {
+      //Hot Manga API
+      manga.clear();
+      var res = await CallApi().getBrowserhot('');
+      var bodyRoutes = json.decode(res.body);
+      manga.add(bodyRoutes);
 
-    for (var mov in jsonData) {
-      Movies movie =
-          Movies(mov[1]["title"], mov[6]["gpurl"], mov[3]["country"]);
-      movies.add(movie);
+
+
+      //new Manga API
+      Newmanga.clear();
+      var resNew = await CallApi().getBrowserNew('');
+      var bodyRoutesNew = json.decode(resNew.body);
+      Newmanga.add(bodyRoutesNew);
+
+   
+
+      //View Manga API
+      ViewManga.clear();
+      var resView = await CallApi().getViewMangas('');
+      var bodyRoutesView = json.decode(resView.body);
+      ViewManga.add(bodyRoutesView);
+
+
+      //Rating Manga API
+      RatingManga.clear();
+      var resRating = await CallApi().getRatingMangas('');
+      var bodyRoutesRating = json.decode(resRating.body);
+      RatingManga.add(bodyRoutesRating);
+
+
+      print("Hot Manga API ---" + manga.toString() );
+      print("--------------------------------");
+      print("New Manga API ---" + Newmanga.toString());
+      print("--------------------------------");
+      print("View Manga API ---" + ViewManga.toString());
+      print("--------------------------------");
+      print("Rating Manga API ---" + RatingManga.toString());
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(e);
     }
-    print(movies);
-    return movies;
   }
+
+  // Future getMoviedata() async {
+  //   var response = await http.get(
+  //     Uri.https('api.comick.fun', 'chapter?order=hot'),
+
+  //     //      headers: {
+  //     //   'Content-Type': 'application/json',
+  //     //   'Accept': "application/json",
+  //     // }
+  //   );
+
+  //   // Map<int, dynamic> map = json.decode(response.body);
+  //   // List<dynamic> data = map["md_comics"];
+  //   // print(data[0]["id"]);
+
+  //   var jsonData = jsonDecode(response.body);
+
+  //   List<Movies> movies = [];
+
+  //   for (var mov in jsonData) {
+  //     Movies movie =
+  //         Movies(mov[1]["title"], mov[6]["gpurl"], mov[3]["country"]);
+  //     movies.add(movie);
+  //   }
+  //   print(movies);
+  //   return movies;
+  // }
 
 // method2
   // void _apiMangaDetails() async {
@@ -129,7 +188,7 @@ class _MovScreenState extends State<MovScreen> {
           child: RaisedButton(
             child: Text("Click"),
             onPressed: () {
-              getMoviedata();
+              _apiMangaDetails();
             },
           ),
         )

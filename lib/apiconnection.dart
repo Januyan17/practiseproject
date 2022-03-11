@@ -14,49 +14,11 @@ class CallApi {
   var baseurlforRating =
       'https://api.comick.fun/search?page=1&limit=50&sort=rating';
 
-  //chapter api
-  var ChapterDetaislByName = 'https://api.comick.fun/comic/';
-  var ChapterDetaislByID = 'https://api.comick.fun/comic/';
-
-  var search = "https://api.comick.fun/search?page=1&limit=50&q=";
-
-  // Auth Api
-  var _urlAuth = 'http://mangakiku-api.moodfor.codes/api/';
-
   var token = "276|Ozi5T5NG1482uwB4m0MeZVDmUC5uMKJHuAWFrcwh";
-  //Genres api url
-  var genres_baseurl = 'https://api.comick.fun/genre';
+
   //browser
   var hoturl = 'https://api.comick.fun/search?page=1&limit=50&sort=uploaded';
   var newurl = 'https://api.comick.fun/search?page=1&limit=50&sort=follow';
-
-  //advance search
-  var advacesearch = 'https://api.comick.fun/search?genres=';
-
-  //Login api
-
-//Genres api
-  getGenres(apiUrl) async {
-    var fullUrl = Uri.parse(genres_baseurl + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-//home page api
-  getMangas(apiUrl) async {
-    var fullUrl = Uri.parse(baseurl + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-  getNewMangas(apiUrl) async {
-    var fullUrl = Uri.parse(baseurlforNew + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
 
   getViewMangas(apiUrl) async {
     var fullUrl = Uri.parse(baseurlforView + apiUrl);
@@ -72,39 +34,9 @@ class CallApi {
     );
   }
 
-//chapter
-  getChapterUsingName(apiUrl) async {
-    var fullUrl = Uri.parse(ChapterDetaislByName + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-  getChapterUsingID(apiUrl) async {
-    var fullUrl = Uri.parse(ChapterDetaislByID + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-  getChapterImages(apiUrl) async {
-    var fullUrl = Uri.parse(url + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
   //browser page
   getBrowserhot(apiUrl) async {
     var fullUrl = Uri.parse(hoturl + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-  //Search page
-  getSearch(apiUrl) async {
-    var fullUrl = Uri.parse(search + apiUrl);
     return await http.get(
       fullUrl,
     );
@@ -118,96 +50,9 @@ class CallApi {
     );
   }
 
-  //get User by ID
-  getUserById(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-//advance search
-  getAdvaceSearch(apiUrl) async {
-    var fullUrl = Uri.parse(advacesearch + apiUrl);
-    return await http.get(
-      fullUrl,
-    );
-  }
-
-//post data
-  postData(data, apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.post(
-      fullUrl,
-      body: jsonEncode(data),
-      headers: _setHeaders(),
-    );
-  }
-
-  //Get Comments
-  getComments(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-  //Get Comments
-  getApiSetting(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-  //LeaderBoard
-  getLeaderBoard(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-  //User Library
-  getUserLibrary(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-  //User Library
-  getUserFavourite(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
-  //Get Reply Comments
-  getReplyComments(apiUrl) async {
-    var fullUrl = Uri.parse(_urlAuth + apiUrl);
-    return await http.get(
-      fullUrl,
-      headers: _setHeaders(),
-    );
-  }
-
   _setHeaders() => {
         'Content-type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token'
       };
-
-  // _getToken() async {
-  //   SharedPreferences localStorage = await SharedPreferences.getInstance();
-  //   var token = localStorage.getString('token');
-  //   return '?token=$token';
-  // }
 }
