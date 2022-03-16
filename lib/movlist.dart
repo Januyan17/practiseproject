@@ -7,6 +7,7 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:http/http.dart' as http;
 import 'Movielist.dart';
 import 'apiconnection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MovScreen extends StatefulWidget {
   const MovScreen({Key? key}) : super(key: key);
@@ -16,6 +17,11 @@ class MovScreen extends StatefulWidget {
 }
 
 class _MovScreenState extends State<MovScreen> {
+  @override
+  void initState() {
+    _apiMangaDetails();
+  }
+
   bool _isLoading = true;
 
   //list for api
@@ -28,31 +34,42 @@ class _MovScreenState extends State<MovScreen> {
   void _apiMangaDetails() async {
     try {
       //Hot Manga API
-      manga.clear();
-      var res = await CallApi().getBrowserhot('');
-      var bodyRoutes = json.decode(res.body);
-      manga = bodyRoutes;
+      // manga.clear();
+      // var res = await CallApi().getBrowserhot('');
+      // var bodyRoutes = json.decode(res.body);
+      // manga = bodyRoutes;
 
       //new Manga API
       Newmanga.clear();
       var resNew = await CallApi().getBrowserNew('');
       var bodyRoutesNew = json.decode(resNew.body);
-      Newmanga.add(bodyRoutesNew);
+
+      Newmanga = bodyRoutesNew;
+
+      for (var i = 0; i < Newmanga.length; i++) {
+        ViewManga.add({"title": Newmanga[i]["title"]});
+        print(ViewManga);
+      }
+
+      //print(Newmanga[0]["title"]);
+
+      // final prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('Title Saved', 'title');
 
       //View Manga API
-      ViewManga.clear();
-      var resView = await CallApi().getViewMangas('');
-      var bodyRoutesView = json.decode(resView.body);
-      ViewManga.add(bodyRoutesView);
+      // ViewManga.clear();
+      // var resView = await CallApi().getViewMangas('');
+      // var bodyRoutesView = json.decode(resView.body);
+      // ViewManga.add(bodyRoutesView);
 
-      //Rating Manga API
-      RatingManga.clear();
-      var resRating = await CallApi().getRatingMangas('');
-      var bodyRoutesRating = json.decode(resRating.body);
-      RatingManga.add(bodyRoutesRating);
+      // //Rating Manga API
+      // RatingManga.clear();
+      // var resRating = await CallApi().getRatingMangas('');
+      // var bodyRoutesRating = json.decode(resRating.body);
+      // RatingManga.add(bodyRoutesRating);
 
-      print("Hot Manga API ---" + manga.toString());
-      print("--------------------------------");
+      // print("Hot Manga API ---" + manga.toString());
+      // print("--------------------------------");
       // print("New Manga API ---" + Newmanga.toString());
       // print("--------------------------------");
       // print("View Manga API ---" + ViewManga.toString());
@@ -94,41 +111,6 @@ class _MovScreenState extends State<MovScreen> {
   //   return movies;
   // }
 
-// method2
-  // void _apiMangaDetails() async {
-  //   try {
-  //     //Hot Manga API
-  //     manga.clear();
-  //     var res = await CallApi().getBrowserhot('');
-  //     var bodyRoutes = json.decode(res.body);
-  //     manga.add(bodyRoutes);
-
-  //     //new Manga API
-  //     Newmanga.clear();
-  //     var resNew = await CallApi().getBrowserNew('');
-  //     var bodyRoutesNew = json.decode(resNew.body);
-  //     Newmanga.add(bodyRoutesNew);
-
-  //     //View Manga API
-  //     ViewManga.clear();
-  //     var resView = await CallApi().getViewMangas('');
-  //     var bodyRoutesView = json.decode(resView.body);
-  //     ViewManga.add(bodyRoutesView);
-
-  //     //Rating Manga API
-  //     RatingManga.clear();
-  //     var resRating = await CallApi().getRatingMangas('');
-  //     var bodyRoutesRating = json.decode(resRating.body);
-  //     RatingManga.add(bodyRoutesRating);
-
-  //     setState(() {
-  //       // _isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   String dropdownvalue = 'Hot';
 
   var items = [
@@ -140,80 +122,80 @@ class _MovScreenState extends State<MovScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40.0),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            actions: [
-              Container(
-                width: 150,
-                child: DropdownButton(
-                  value: dropdownvalue,
-                  focusColor: Colors.transparent,
-                  dropdownColor: Color.fromARGB(255, 110, 13, 128),
+      backgroundColor: Colors.black,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
+            Container(
+              width: 150,
+              child: DropdownButton(
+                value: dropdownvalue,
+                focusColor: Colors.transparent,
+                dropdownColor: Color.fromARGB(255, 110, 13, 128),
 
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
+                // Down Arrow Icon
+                icon: const Icon(Icons.keyboard_arrow_down),
 
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(
-                        items,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(
+                      items,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }).toList(),
 
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownvalue = newValue!;
-                    });
-                  },
-                ),
-              )
-            ],
-          ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownvalue = newValue!;
+                  });
+                },
+              ),
+            )
+          ],
         ),
-        body: Center(
-          child: RaisedButton(
-            child: Text("Click"),
-            onPressed: () {
-              _apiMangaDetails();
-            },
-          ),
-        )
-        // body: Container(
-        //   child: FutureBuilder(
-        //     future: getMoviedata(),
-        //     builder: (context,snapshot){
-        //       if (snapshot.data == null) {
-        //         return Container(
-        //           child: Text("Loading"),
-        //         );
-        //       }
-        //     },
-        //   ),
-        // )
-        // bottomNavigationBar: SizedBox(
-        //   height: 100,
-        //   child: FloatingNavbar(
-        //     width: 300.0,
-        //     backgroundColor: Colors.white.withOpacity(0.2),
-        //     onTap: (int val) {
-        //       //returns tab id which is user tapped
-        //     },
-        //     currentIndex: 3,
-        //     items: [
-        //       FloatingNavbarItem(icon: Icons.home, title: 'Home'),
-        //       FloatingNavbarItem(icon: Icons.explore, title: 'Explore'),
-        //       FloatingNavbarItem(icon: Icons.chat_bubble_outline, title: 'Chats'),
-        //       FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
-        //     ],
-        //   ),
-        // ),
-        );
+      ),
+      // body: Center(
+      //   child: RaisedButton(
+      //     child: Text("Click"),
+      //     onPressed: () {
+      //       _apiMangaDetails();
+      //     },
+      //   ),
+      // )
+      // body: Container(
+      //   child: FutureBuilder(
+      //     future: getMoviedata(),
+      //     builder: (context,snapshot){
+      //       if (snapshot.data == null) {
+      //         return Container(
+      //           child: Text("Loading"),
+      //         );
+      //       }
+      //     },
+      //   ),
+      // )
+      // bottomNavigationBar: SizedBox(
+      //   height: 100,
+      //   child: FloatingNavbar(
+      //     width: 300.0,
+      //     backgroundColor: Colors.white.withOpacity(0.2),
+      //     onTap: (int val) {
+      //       //returns tab id which is user tapped
+      //     },
+      //     currentIndex: 3,
+      //     items: [
+      //       FloatingNavbarItem(icon: Icons.home, title: 'Home'),
+      //       FloatingNavbarItem(icon: Icons.explore, title: 'Explore'),
+      //       FloatingNavbarItem(icon: Icons.chat_bubble_outline, title: 'Chats'),
+      //       FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
+      //     ],
+      //   ),
+      // ),
+    );
   }
 }
 
@@ -380,7 +362,7 @@ Widget recentlyadded(BuildContext context) {
 }
 
 class Movies {
-  final String title, image, rating;
+  final String title;
 
-  Movies(this.title, this.image, this.rating);
+  Movies({required this.title});
 }
